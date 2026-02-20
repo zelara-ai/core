@@ -1,3 +1,6 @@
 [submodule "org"]
 	path = org
 	url = https://github.com/zelara-ai/.github.git
+[submodule "wikis"]
+	path = wikis
+	url = https://github.com/zelara-ai/core.wiki.git
