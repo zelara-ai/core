@@ -1,0 +1,21 @@
+{
+  "name": "@zelara/state",
+  "version": "0.1.0",
+  "description": "Local-first state management for Zelara",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["zelara", "state", "storage"],
+  "author": "Zelara AI",
+  "license": "MIT",
+  "dependencies": {
+    "@zelara/shared": "file:../shared"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "@types/node": "^20.0.0"
+  }
+}

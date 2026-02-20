@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+*/node_modules/
+**/node_modules/
+
+# Build output
+dist/
+*/dist/
+**/dist/
+build/
+*/build/
+**/build/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local env
+.env
+.env.local
+
+# Zelara specific
+.zelara/

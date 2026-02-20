@@ -1,0 +1,20 @@
+{
+  "name": "@zelara/device-linking",
+  "version": "0.1.0",
+  "description": "Device linking and task offloading for Zelara",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["zelara", "device-linking", "distributed"],
+  "author": "Zelara AI",
+  "license": "MIT",
+  "dependencies": {
+    "@zelara/shared": "file:../shared"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}

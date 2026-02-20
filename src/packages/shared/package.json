@@ -1,0 +1,17 @@
+{
+  "name": "@zelara/shared",
+  "version": "0.1.0",
+  "description": "Shared TypeScript utilities and types for Zelara",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["zelara", "shared", "utilities"],
+  "author": "Zelara AI",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}

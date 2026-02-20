@@ -1,0 +1,20 @@
+{
+  "name": "@zelara/skill-tree",
+  "version": "0.1.0",
+  "description": "Skill tree progression system for Zelara",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["zelara", "skill-tree", "progression"],
+  "author": "Zelara AI",
+  "license": "MIT",
+  "dependencies": {
+    "@zelara/shared": "file:../shared"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}
