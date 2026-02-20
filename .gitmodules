@@ -4,3 +4,15 @@
 [submodule "wikis"]
 	path = wikis
 	url = https://github.com/zelara-ai/core.wiki.git
+[submodule "apps/desktop"]
+	path = apps/desktop
+	url = https://github.com/zelara-ai/app-desktop.git
+[submodule "apps/mobile"]
+	path = apps/mobile
+	url = https://github.com/zelara-ai/app-mobile.git
+[submodule "modules/finance"]
+	path = modules/finance
+	url = https://github.com/zelara-ai/module-finance.git
+[submodule "modules/green"]
+	path = modules/green
+	url = https://github.com/zelara-ai/module-green.git
