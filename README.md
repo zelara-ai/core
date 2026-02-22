@@ -31,7 +31,7 @@ core/
 
 ## Documentation
 
-See [wiki](wiki/) for:
+See [wiki](https://github.com/zelara-ai/core/wiki) for:
 - Architecture decisions
 - Technology stack
 - Device linking protocol
