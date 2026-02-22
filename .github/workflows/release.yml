@@ -37,6 +37,25 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Build shared packages
+        run: |
+          # Build all shared packages that apps depend on
+          cd src/packages/shared
+          npm install
+          npm run build
+
+          cd ../skill-tree
+          npm install
+          npm run build
+
+          cd ../state
+          npm install
+          npm run build
+
+          cd ../device-linking
+          npm install
+          npm run build
+
       - name: Install dependencies
         run: |
           cd apps/mobile
@@ -88,6 +107,24 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Build shared packages
+        run: |
+          cd src/packages/shared
+          npm install
+          npm run build
+
+          cd ../skill-tree
+          npm install
+          npm run build
+
+          cd ../state
+          npm install
+          npm run build
+
+          cd ../device-linking
+          npm install
+          npm run build
+
       - name: Install Tauri dependencies
         run: |
           cd apps/desktop
@@ -134,6 +171,24 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Build shared packages
+        run: |
+          cd src/packages/shared
+          npm install
+          npm run build
+
+          cd ../skill-tree
+          npm install
+          npm run build
+
+          cd ../state
+          npm install
+          npm run build
+
+          cd ../device-linking
+          npm install
+          npm run build
 
       - name: Install Tauri dependencies
         run: |
@@ -185,6 +240,24 @@ jobs:
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
+
+      - name: Build shared packages
+        run: |
+          cd src/packages/shared
+          npm install
+          npm run build
+
+          cd ../skill-tree
+          npm install
+          npm run build
+
+          cd ../state
+          npm install
+          npm run build
+
+          cd ../device-linking
+          npm install
+          npm run build
 
       - name: Install dependencies
         run: |
@@ -253,6 +326,24 @@ jobs:
             librsvg2-dev \
             patchelf \
             libssl-dev
+
+      - name: Build shared packages
+        run: |
+          cd src/packages/shared
+          npm install
+          npm run build
+
+          cd ../skill-tree
+          npm install
+          npm run build
+
+          cd ../state
+          npm install
+          npm run build
+
+          cd ../device-linking
+          npm install
+          npm run build
 
       - name: Install Tauri dependencies
         run: |
