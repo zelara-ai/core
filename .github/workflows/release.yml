@@ -13,80 +13,78 @@ jobs:
   # ============================================
   # Android APK Build
   # ============================================
-  # DISABLED: Requires React Native android/ directory initialization
-  # TODO: Initialize React Native project with `npx react-native init`
-  # build-android:
-  #   name: Build Android APK
-  #   runs-on: ubuntu-latest
-  #
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         submodules: recursive
-  #
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '18'
-  #
-  #     - name: Setup Java
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: '17'
-  #
-  #     - name: Setup Android SDK
-  #       uses: android-actions/setup-android@v3
-  #
-  #     - name: Build shared packages
-  #       run: |
-  #         # Build all shared packages that apps depend on
-  #         cd src/packages/shared
-  #         npm install
-  #         npm run build
-  #
-  #         cd ../skill-tree
-  #         npm install
-  #         npm run build
-  #
-  #         cd ../state
-  #         npm install
-  #         npm run build
-  #
-  #         cd ../device-linking
-  #         npm install
-  #         npm run build
-  #
-  #     - name: Install dependencies
-  #       run: |
-  #         cd apps/mobile
-  #         npm install --legacy-peer-deps
-  #
-  #     - name: Build Android APK
-  #       run: |
-  #         cd apps/mobile/android
-  #         chmod +x gradlew
-  #         ./gradlew assembleRelease
-  #
-  #     - name: Sign APK (if keystore available)
-  #       if: env.ANDROID_KEYSTORE_BASE64 != ''
-  #       env:
-  #         ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-  #         ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-  #         ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-  #         ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
-  #       run: |
-  #         cd apps/mobile/android
-  #         echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > release.keystore
-  #         # Signing will be handled by Gradle if secrets are configured
-  #
-  #     - name: Upload APK artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: android-apk
-  #         path: apps/mobile/android/app/build/outputs/apk/release/app-release.apk
-  #         retention-days: 7
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build shared packages
+        run: |
+          # Build all shared packages that apps depend on
+          cd src/packages/shared
+          npm install
+          npm run build
+
+          cd ../skill-tree
+          npm install
+          npm run build
+
+          cd ../state
+          npm install
+          npm run build
+
+          cd ../device-linking
+          npm install
+          npm run build
+
+      - name: Install dependencies
+        run: |
+          cd apps/mobile
+          npm install --legacy-peer-deps
+
+      - name: Build Android APK
+        run: |
+          cd apps/mobile/android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Sign APK (if keystore available)
+        if: env.ANDROID_KEYSTORE_BASE64 != ''
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+        run: |
+          cd apps/mobile/android
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > release.keystore
+          # Signing will be handled by Gradle if secrets are configured
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: apps/mobile/android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 7
 
   # ============================================
   # Windows Desktop EXE Build
@@ -378,7 +376,7 @@ jobs:
   # ============================================
   create-release:
     name: Create GitHub Release
-    needs: [build-windows, build-macos, build-linux]
+    needs: [build-android, build-windows, build-macos, build-linux]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -400,6 +398,7 @@ jobs:
           prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'test') }}
           generate_release_notes: true
           files: |
+            artifacts/android-apk/*.apk
             artifacts/windows-installer/*.msi
             artifacts/windows-exe/*.exe
             artifacts/macos-dmg/*.dmg
@@ -410,12 +409,21 @@ jobs:
 
             ### Downloads
 
-            **Desktop Only** (Mobile builds coming soon):
+            **Mobile**:
+            - 📱 Android: `app-release.apk`
+            - 🍎 iOS: Coming soon (requires native project setup)
+
+            **Desktop**:
             - 🪟 Windows: `.msi` installer or `.exe` portable
             - 🍎 macOS: `.dmg` installer (Universal Binary - Intel + Apple Silicon)
             - 🐧 Linux: `.AppImage` portable or `.deb` package
 
             ### Installation Instructions
+
+            **Android**:
+            1. Download `app-release.apk`
+            2. Enable "Install from Unknown Sources" in Settings
+            3. Open APK to install
 
             **Windows**:
             1. Download `.msi` for installer or `.exe` for portable
