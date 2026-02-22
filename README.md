@@ -31,7 +31,7 @@ core/
 
 ## Documentation
 
-See [wiki](wikis/) for:
+See [wiki](wiki/) for:
 - Architecture decisions
 - Technology stack
 - Device linking protocol
