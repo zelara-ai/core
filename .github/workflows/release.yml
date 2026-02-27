@@ -39,22 +39,12 @@ jobs:
 
       - name: Build shared packages
         run: |
-          # Build all shared packages that apps depend on
-          cd src/packages/shared
+          cd src/packages
           npm install
-          npm run build
-
-          cd ../skill-tree
-          npm install
-          npm run build
-
-          cd ../state
-          npm install
-          npm run build
-
-          cd ../device-linking
-          npm install
-          npm run build
+          npm run build -w @zelara/shared
+          npm run build -w @zelara/skill-tree
+          npm run build -w @zelara/state
+          npm run build -w @zelara/device-linking
 
       - name: Install dependencies
         run: |
@@ -109,21 +99,12 @@ jobs:
 
       - name: Build shared packages
         run: |
-          cd src/packages/shared
+          cd src/packages
           npm install
-          npm run build
-
-          cd ../skill-tree
-          npm install
-          npm run build
-
-          cd ../state
-          npm install
-          npm run build
-
-          cd ../device-linking
-          npm install
-          npm run build
+          npm run build -w @zelara/shared
+          npm run build -w @zelara/skill-tree
+          npm run build -w @zelara/state
+          npm run build -w @zelara/device-linking
 
       - name: Install Tauri dependencies
         run: |
@@ -174,21 +155,12 @@ jobs:
 
       - name: Build shared packages
         run: |
-          cd src/packages/shared
+          cd src/packages
           npm install
-          npm run build
-
-          cd ../skill-tree
-          npm install
-          npm run build
-
-          cd ../state
-          npm install
-          npm run build
-
-          cd ../device-linking
-          npm install
-          npm run build
+          npm run build -w @zelara/shared
+          npm run build -w @zelara/skill-tree
+          npm run build -w @zelara/state
+          npm run build -w @zelara/device-linking
 
       - name: Install Tauri dependencies
         run: |
@@ -331,21 +303,12 @@ jobs:
 
       - name: Build shared packages
         run: |
-          cd src/packages/shared
+          cd src/packages
           npm install
-          npm run build
-
-          cd ../skill-tree
-          npm install
-          npm run build
-
-          cd ../state
-          npm install
-          npm run build
-
-          cd ../device-linking
-          npm install
-          npm run build
+          npm run build -w @zelara/shared
+          npm run build -w @zelara/skill-tree
+          npm run build -w @zelara/state
+          npm run build -w @zelara/device-linking
 
       - name: Install Tauri dependencies
         run: |
