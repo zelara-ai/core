@@ -1,0 +1,13 @@
+{
+  "name": "@zelara/packages",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "skill-tree",
+    "state",
+    "device-linking"
+  ],
+  "devDependencies": {
+    "typescript": "~5.8.3"
+  }
+}
