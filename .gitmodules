@@ -16,3 +16,6 @@
 [submodule "modules/green"]
 	path = modules/green
 	url = https://github.com/zelara-ai/module-green.git
+[submodule "modules/testing"]
+	path = modules/testing
+	url = https://github.com/zelara-ai/testing.git
