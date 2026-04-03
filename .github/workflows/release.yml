@@ -345,6 +345,12 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
@@ -353,6 +359,76 @@ jobs:
       - name: Display artifact structure
         run: ls -R artifacts/
 
+      - name: Build release body
+        run: |
+          TAG="${{ github.ref_name }}"
+          # For annotated tags, use the tag message body; fall back to commit body
+          TAG_BODY=$(git tag -l --format='%(contents:body)' "$TAG")
+          if [ -z "$TAG_BODY" ]; then
+            TAG_BODY=$(git log -1 --format="%b" "$TAG")
+          fi
+
+          cat > release_body.md << 'ENDOFBODY'
+          ## Zelara ${{ github.ref_name }}
+          ENDOFBODY
+
+          # Inject commit/tag body after the heading if present
+          if [ -n "$TAG_BODY" ]; then
+            printf '\n%s\n' "$TAG_BODY" >> release_body.md
+          fi
+
+          cat >> release_body.md << 'ENDOFBODY'
+
+          ### Downloads
+
+          **Mobile**:
+          - 📱 Android: `app-release.apk`
+          - 🍎 iOS: Coming soon (requires native project setup)
+
+          **Desktop**:
+          - 🪟 Windows: `.msi` installer or `.exe` portable
+          - 🍎 macOS: `.dmg` installer (Universal Binary - Intel + Apple Silicon)
+          - 🐧 Linux: `.AppImage` portable or `.deb` package
+
+          ### Installation Instructions
+
+          **Android**:
+          1. Download `app-release.apk`
+          2. Enable "Install from Unknown Sources" in Settings
+          3. Open APK to install
+
+          **Windows**:
+          1. Download `.msi` for installer or `.exe` for portable
+          2. Run installer or extract portable version
+
+          **macOS**:
+          1. Download `.dmg`
+          2. Open DMG and drag app to Applications
+          3. Right-click app → Open (first time, to bypass Gatekeeper)
+
+          **Linux**:
+          1. Download `.AppImage` or `.deb`
+          2. AppImage: `chmod +x *.AppImage && ./Zelara*.AppImage`
+          3. DEB: `sudo dpkg -i *.deb`
+
+          ### What's Included
+
+          ✅ Device Linking (Desktop ↔ Mobile via QR code)
+          ✅ Recycling Task (Camera + Image Validation)
+          ✅ Point System (Progress persistence)
+          ✅ Mock CV Validation (ONNX model not yet integrated)
+
+          ### Known Limitations
+
+          - Mock validation only (returns 85% confidence)
+          - Finance module not yet unlockable
+          - iOS build unsigned (requires Xcode signing)
+
+          ---
+
+          🤖 Built with GitHub Actions
+          ENDOFBODY
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -360,6 +436,7 @@ jobs:
           draft: false
           prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'test') }}
           generate_release_notes: true
+          body_path: release_body.md
           files: |
             artifacts/android-apk/*.apk
             artifacts/windows-installer/*.msi
@@ -367,56 +444,5 @@ jobs:
             artifacts/macos-dmg/*.dmg
             artifacts/linux-appimage/*.AppImage
             artifacts/linux-deb/*.deb
-          body: |
-            ## Zelara ${{ github.ref_name }}
-
-            ### Downloads
-
-            **Mobile**:
-            - 📱 Android: `app-release.apk`
-            - 🍎 iOS: Coming soon (requires native project setup)
-
-            **Desktop**:
-            - 🪟 Windows: `.msi` installer or `.exe` portable
-            - 🍎 macOS: `.dmg` installer (Universal Binary - Intel + Apple Silicon)
-            - 🐧 Linux: `.AppImage` portable or `.deb` package
-
-            ### Installation Instructions
-
-            **Android**:
-            1. Download `app-release.apk`
-            2. Enable "Install from Unknown Sources" in Settings
-            3. Open APK to install
-
-            **Windows**:
-            1. Download `.msi` for installer or `.exe` for portable
-            2. Run installer or extract portable version
-
-            **macOS**:
-            1. Download `.dmg`
-            2. Open DMG and drag app to Applications
-            3. Right-click app → Open (first time, to bypass Gatekeeper)
-
-            **Linux**:
-            1. Download `.AppImage` or `.deb`
-            2. AppImage: `chmod +x *.AppImage && ./Zelara*.AppImage`
-            3. DEB: `sudo dpkg -i *.deb`
-
-            ### What's Included
-
-            ✅ Device Linking (Desktop ↔ Mobile via QR code)
-            ✅ Recycling Task (Camera + Image Validation)
-            ✅ Point System (Progress persistence)
-            ✅ Mock CV Validation (ONNX model not yet integrated)
-
-            ### Known Limitations
-
-            - Mock validation only (returns 85% confidence)
-            - Finance module not yet unlockable
-            - iOS build unsigned (requires Xcode signing)
-
-            ---
-
-            🤖 Built with GitHub Actions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
