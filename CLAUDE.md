@@ -4,7 +4,8 @@ This document guides AI assistants (Claude, Cursor, etc.) working on Zelara.
 
 ## Project Context
 
-**What**: Client-side, cross-platform lifestyle app with skill tree progression system
+**What**: Family of edge-first mobile apps (Zelara, Zelara Finance, ...) powered by Zelara
+Core — a local AI hub that runs on the user's desktop and serves AI capabilities to all apps
 
 **Why**: Help users organize their lives (finance, productivity, home) while contributing to green causes
 
@@ -70,12 +71,14 @@ modules/finance/               (submodule - unlocks at skill tree level 2)
 - Skill tree definitions version-controlled in `core` repo
 
 ### Edge Processing Priority
-When a task requires more compute than current device can handle:
-1. **Desktop** - Full CV models, complex calculations (highest priority)
-2. **Mobile** - Lightweight models, acceptable accuracy
-3. **Web** - Very lightweight or rule-based (lowest capability)
+When a task requires more compute than the requesting device can handle:
+1. **Zelara Core (Desktop)** - ONNX models, local LLMs, all heavy inference. Primary AI
+   provider for all connected Zelara apps. Connected via TLS WebSocket over local network.
+2. **Mobile** - Lightweight rule-based fallbacks when Core is not available
+3. **Web** - Deferred to v2 (not in current scope)
 
-If user's device can't process task → offload to linked capable device → prompt to link if none available
+If user's device can't process task → offload to Zelara Core via `ai_task` WSS message →
+prompt to install/connect Core if not yet linked
 
 ## Working with This Repo
 
