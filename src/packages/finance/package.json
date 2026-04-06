@@ -1,0 +1,17 @@
+{
+  "name": "@zelara/finance",
+  "version": "0.1.0",
+  "description": "Finance types, engines, and repository interface for Zelara",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["zelara", "finance"],
+  "author": "Zelara AI",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "~5.8.3"
+  }
+}

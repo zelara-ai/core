@@ -5,7 +5,8 @@
     "shared",
     "skill-tree",
     "state",
-    "device-linking"
+    "device-linking",
+    "finance"
   ],
   "devDependencies": {
     "typescript": "~5.8.3"
