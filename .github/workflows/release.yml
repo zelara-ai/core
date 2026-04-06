@@ -38,6 +38,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Guard @zelara/finance — no react-native imports
+        shell: bash
         run: |
           if grep -r "react-native" src/packages/finance/ 2>/dev/null; then
             echo "ERROR: @zelara/finance must not import react-native"
@@ -160,6 +161,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Guard @zelara/finance — no react-native imports
+        shell: bash
         run: |
           if grep -r "react-native" src/packages/finance/ 2>/dev/null; then
             echo "ERROR: @zelara/finance must not import react-native"
@@ -225,6 +227,7 @@ jobs:
           targets: aarch64-apple-darwin,x86_64-apple-darwin
 
       - name: Guard @zelara/finance — no react-native imports
+        shell: bash
         run: |
           if grep -r "react-native" src/packages/finance/ 2>/dev/null; then
             echo "ERROR: @zelara/finance must not import react-native"
@@ -382,6 +385,7 @@ jobs:
             libssl-dev
 
       - name: Guard @zelara/finance — no react-native imports
+        shell: bash
         run: |
           if grep -r "react-native" src/packages/finance/ 2>/dev/null; then
             echo "ERROR: @zelara/finance must not import react-native"
