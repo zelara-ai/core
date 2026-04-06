@@ -132,11 +132,16 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleRelease
 
+      - name: Rename Testing APK for release
+        run: |
+          cp apps/testing-mobile/android/app/build/outputs/apk/release/app-release.apk \
+            apps/testing-mobile/android/app/build/outputs/apk/release/zelara-testing.apk
+
       - name: Upload Testing APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: testing-android-apk
-          path: apps/testing-mobile/android/app/build/outputs/apk/release/app-release.apk
+          path: apps/testing-mobile/android/app/build/outputs/apk/release/zelara-testing.apk
           retention-days: 7
 
   # ============================================
@@ -532,7 +537,7 @@ jobs:
           body_path: release_body.md
           files: |
             artifacts/android-apk/*.apk
-            artifacts/testing-android-apk/*.apk
+            artifacts/testing-android-apk/zelara-testing.apk
             artifacts/windows-installer/*.msi
             artifacts/windows-exe/*.exe
             artifacts/macos-dmg/*.dmg
