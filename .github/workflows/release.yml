@@ -86,6 +86,59 @@ jobs:
           retention-days: 7
 
   # ============================================
+  # Testing Android APK Build
+  # ============================================
+  build-testing-android:
+    name: Build Testing Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build shared packages
+        run: |
+          cd src/packages
+          npm install
+          npm run build -w @zelara/shared
+          npm run build -w @zelara/state
+          npm run build -w @zelara/device-linking
+
+      - name: Install dependencies
+        run: |
+          cd apps/testing-mobile
+          npm install --legacy-peer-deps
+
+      - name: Build Testing Android APK
+        run: |
+          cd apps/testing-mobile/android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Upload Testing APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: testing-android-apk
+          path: apps/testing-mobile/android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 7
+
+  # ============================================
   # Windows Desktop EXE Build
   # ============================================
   build-windows:
@@ -375,7 +428,7 @@ jobs:
   # ============================================
   create-release:
     name: Create GitHub Release
-    needs: [build-android, build-windows, build-macos, build-linux]
+    needs: [build-android, build-testing-android, build-windows, build-macos, build-linux]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -475,6 +528,7 @@ jobs:
           body_path: release_body.md
           files: |
             artifacts/android-apk/*.apk
+            artifacts/testing-android-apk/*.apk
             artifacts/windows-installer/*.msi
             artifacts/windows-exe/*.exe
             artifacts/macos-dmg/*.dmg
