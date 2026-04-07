@@ -190,6 +190,7 @@ jobs:
         run: |
           cd apps/finance-mobile/android
           chmod +x gradlew
+          export NODE_ENV=production
           ./gradlew assembleRelease
 
       - name: Rename Finance APK for release
