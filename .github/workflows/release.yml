@@ -145,6 +145,66 @@ jobs:
           retention-days: 7
 
   # ============================================
+  # Finance Android APK Build
+  # ============================================
+  build-finance-android:
+    name: Build Finance Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build shared packages
+        run: |
+          cd src/packages
+          npm install
+          npm run build -w @zelara/shared
+          npm run build -w @zelara/skill-tree
+          npm run build -w @zelara/state
+          npm run build -w @zelara/device-linking
+          npm run build -w @zelara/finance
+
+      - name: Install dependencies
+        run: |
+          cd apps/finance-mobile
+          npm install --legacy-peer-deps
+
+      - name: Build Finance Android APK
+        run: |
+          cd apps/finance-mobile/android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Rename Finance APK for release
+        run: |
+          cp apps/finance-mobile/android/app/build/outputs/apk/release/app-release.apk \
+            apps/finance-mobile/android/app/build/outputs/apk/release/zelara-finance.apk
+
+      - name: Upload Finance APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: finance-android-apk
+          path: apps/finance-mobile/android/app/build/outputs/apk/release/zelara-finance.apk
+          retention-days: 7
+
+  # ============================================
   # Windows Desktop EXE Build
   # ============================================
   build-windows:
@@ -437,7 +497,7 @@ jobs:
   # ============================================
   create-release:
     name: Create GitHub Release
-    needs: [build-android, build-testing-android, build-windows, build-macos, build-linux]
+    needs: [build-android, build-testing-android, build-finance-android, build-windows, build-macos, build-linux]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -538,6 +598,7 @@ jobs:
           files: |
             artifacts/android-apk/*.apk
             artifacts/testing-android-apk/zelara-testing.apk
+            artifacts/finance-android-apk/zelara-finance.apk
             artifacts/windows-installer/*.msi
             artifacts/windows-exe/*.exe
             artifacts/macos-dmg/*.dmg

@@ -22,3 +22,6 @@
 [submodule "apps/testing-mobile"]
 	path = apps/testing-mobile
 	url = https://github.com/zelara-ai/testing-mobile.git
+[submodule "apps/finance-mobile"]
+	path = apps/finance-mobile
+	url = https://github.com/zelara-ai/finance-mobile.git
